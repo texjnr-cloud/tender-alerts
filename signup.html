@@ -19,9 +19,9 @@
         <!-- Email -->
         <div>
           <label class="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
-          <input type="email" id="email" required 
-                 placeholder="your@email.com"
-                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          <input type="email" id="email" required readonly
+       placeholder="your@email.com"
+       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
 
         <!-- Financial Details -->
@@ -153,6 +153,12 @@
   </div>
 
   <script>
+// Pre-fill email from URL
+const urlParams = new URLSearchParams(window.location.search);
+const emailFromURL = urlParams.get('email');
+if (emailFromURL) {
+  document.getElementById('email').value = emailFromURL;
+}
     document.getElementById('signup-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       
