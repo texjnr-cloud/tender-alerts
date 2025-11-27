@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "name": "tender-alerts",
+  "version": "1.0.0",
+  "description": "Automated tender alerts",
+  "dependencies": {}
+}
