@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Tender Matches - Tendrly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+  <div class="max-w-4xl mx-auto p-8 pt-12">
+    
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-xl text-gray-600">Finding your tender matches...</p>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Here Are Your Top Matches</h1>
+        <p class="text-lg text-gray-600">Based on your business profile, we found these tenders for you</p>
+      </div>
+
+      <!-- Tender Cards -->
+      <div id="tender-cards" class="space-y-6 mb-8">
+        <!-- Cards will be inserted here -->
+      </div>
+
+      <!-- Success Message -->
+      <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+        <div class="text-6xl mb-4">✅</div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">You're All Set!</h2>
+        <p class="text-gray-600 mb-4">
+          We'll check for new tenders every day at 9am and email you matches like these.
+        </p>
+        <p class="text-sm text-gray-500">Check your email for confirmation.</p>
+        <a href="/" class="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+          Back to Home
+        </a>
+      </div>
+    </div>
+
+    <!-- No Matches State -->
+    <div id="no-matches" class="hidden text-center py-20">
+      <div class="text-6xl mb-4">🔍</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">No Current Matches</h2>
+      <p class="text-gray-600 mb-6">
+        We didn't find any tenders matching your profile right now, but we'll keep checking daily.
+      </p>
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+        <div class="text-6xl mb-4">✅</div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">You're All Set!</h2>
+        <p class="text-gray-600 mb-4">
+          We'll email you at 9am every day when new tenders appear that match your profile.
+        </p>
+        <a href="/" class="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+          Back to Home
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    async function fetchAndShowTenders() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get('email');
+      
+      if (!email) {
+        window.location.href = '/';
+        return;
+      }
+
+      try {
+        // Fetch tender matches for this user
+        const response = await fetch(`/api/check-tenders?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+        
+        document.getElementById('loading').classList.add('hidden');
+        
+        if (data.matches && data.matches.length > 0) {
+          // Show top 3 matches
+          const topMatches = data.matches.slice(0, 3);
+          
+          const cardsHTML = topMatches.map(match => {
+            const statusConfig = {
+              green: { bg: 'bg-green-100', text: 'text-green-800', label: 'STRONG MATCH' },
+              amber: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'POSSIBLE MATCH' },
+              red: { bg: 'bg-red-100', text: 'text-red-800', label: 'CHECK CAREFULLY' }
+            };
+            const config = statusConfig[match.status] || statusConfig.amber;
+            
+            return `
+              <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 ${match.status === 'green' ? 'border-green-500' : 'border-yellow-500'}">
+                <div class="flex items-start justify-between mb-4">
+                  <div class="flex-1">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">${match.tender.title}</h3>
+                    <p class="text-sm text-gray-600">
+                      ${match.tender.buyer} • 
+                      ${match.tender.value ? '£' + match.tender.value.toLocaleString() : 'Value TBC'}
+                      ${match.tender.deadline ? ' • Deadline: ' + new Date(match.tender.deadline).toLocaleDateString('en-GB') : ''}
+                    </p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text}">
+                    ${config.label}
+                  </span>
+                </div>
+                
+                ${match.passes.length > 0 ? `
+                  <div class="mb-4">
+                    <p class="text-sm font-semibold text-green-700 mb-2">✓ You meet:</p>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                      ${match.passes.map(p => `<li class="flex items-start gap-2"><span class="text-green-600">•</span><span>${p}</span></li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                ${match.issues.length > 0 ? `
+                  <div class="mb-4">
+                    <p class="text-sm font-semibold text-yellow-700 mb-2">⚠ Potential issues:</p>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                      ${match.issues.map(i => `<li class="flex items-start gap-2"><span class="text-yellow-600">•</span><span>${i}</span></li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                <a href="${match.tender.url}" target="_blank" 
+                   class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm">
+                  View Tender on Contracts Finder →
+                </a>
+              </div>
+            `;
+          }).join('');
+          
+          document.getElementById('tender-cards').innerHTML = cardsHTML;
+          document.getElementById('results').classList.remove('hidden');
+        } else {
+          // No matches found
+          document.getElementById('no-matches').classList.remove('hidden');
+        }
+        
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('no-matches').classList.remove('hidden');
+      }
+    }
+
+    // Run on page load
+    fetchAndShowTenders();
+  </script>
+</body>
+</html>
