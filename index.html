@@ -47,18 +47,25 @@
       <p class="text-gray-600 mb-6">Currently in beta. Sign up for early access:</p>
       
       <form id="signup-form" class="space-y-4">
-        <input 
-          type="email" 
-          id="email" 
-          placeholder="your@email.com" 
-          required 
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-       <a href="/signup.html" class="block w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors text-center">
-  Get Started - Free Trial
-</a>
-      </form>
-      
+  <input 
+    type="email" 
+    id="email" 
+    placeholder="your@email.com" 
+    required 
+    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  >
+  <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors">
+    Get Started - Free Trial
+  </button>
+</form>
+
+<script>
+  document.getElementById('signup-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    window.location.href = `/signup.html?email=${encodeURIComponent(email)}`;
+  });
+</script>  
       <p class="text-sm text-gray-500 text-center mt-4">
         First 10 users get 1 month free
       </p>
