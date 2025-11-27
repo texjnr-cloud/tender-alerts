@@ -237,7 +237,8 @@ function formatCurrency(input) {
         // Redirect to results page with profile
         window.location.href = `/results.html?email=${encodeURIComponent(email)}`;
       } else {
-        alert('Error signing up. Please try again.');
+        const errorData = await response.json();
+        alert(errorData.error || 'Error signing up. Please try again.');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Start Free Trial - £29/month after';
       }
