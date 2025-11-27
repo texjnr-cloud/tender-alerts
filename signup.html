@@ -30,9 +30,9 @@
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-semibold text-gray-900 mb-2">Annual Turnover (£)</label>
-              <input type="number" id="turnover" required 
-                     placeholder="2000000"
-                     class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+              <input type="text" id="turnover" required 
+       placeholder="2,000,000"
+       class="w-full px-4 py-3 border border-gray-300 rounded-lg">
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-900 mb-2">Number of Employees</label>
@@ -49,9 +49,9 @@
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-semibold text-gray-900 mb-2">Public Liability (£)</label>
-              <input type="number" id="publicLiability" required 
-                     placeholder="5000000"
-                     class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+             <input type="text" id="publicLiability" required 
+       placeholder="5,000,000"
+       class="w-full px-4 py-3 border border-gray-300 rounded-lg">
               <p class="text-xs text-gray-500 mt-1">Most councils require £5M minimum</p>
             </div>
           </div>
@@ -160,23 +160,44 @@
     document.getElementById('email').value = emailFromURL;
   }
 
-  // Format currency inputs with commas
-  function formatCurrency(input) {
-    let value = input.value.replace(/,/g, ''); // Remove existing commas
-    if (value && !isNaN(value)) {
+  // Format currency inputs with commas as user types
+function formatCurrency(input) {
+  // Get cursor position
+  let cursorPosition = input.selectionStart;
+  let oldLength = input.value.length;
+  
+  // Remove all non-digits
+  let value = input.value.replace(/\D/g, '');
+  
+  // Add commas
+  if (value) {
+    value = parseInt(value).toLocaleString('en-GB');
+  }
+  
+  // Update input
+  input.value = value;
+  
+  // Restore cursor position (accounting for added commas)
+  let newLength = value.length;
+  cursorPosition += (newLength - oldLength);
+  input.setSelectionRange(cursorPosition, cursorPosition);
+}
+
+// Add formatting to currency fields
+['turnover', 'publicLiability'].forEach(id => {
+  const input = document.getElementById(id);
+  
+  // Format on every keystroke
+  input.addEventListener('input', () => formatCurrency(input));
+  
+  // Also format on blur (when leaving field)
+  input.addEventListener('blur', () => {
+    let value = input.value.replace(/\D/g, '');
+    if (value) {
       input.value = parseInt(value).toLocaleString('en-GB');
     }
-  }
-
-  // Add formatting to currency fields
-  ['turnover', 'publicLiability'].forEach(id => {
-    const input = document.getElementById(id);
-    input.addEventListener('blur', () => formatCurrency(input));
-    input.addEventListener('input', (e) => {
-      // Allow only numbers and commas
-      e.target.value = e.target.value.replace(/[^\d,]/g, '');
-    });
   });
+});
 
   document.getElementById('signup-form').addEventListener('submit', async (e) => {
     e.preventDefault();
