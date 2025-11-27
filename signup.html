@@ -153,60 +153,79 @@
   </div>
 
   <script>
-// Pre-fill email from URL
-const urlParams = new URLSearchParams(window.location.search);
-const emailFromURL = urlParams.get('email');
-if (emailFromURL) {
-  document.getElementById('email').value = emailFromURL;
-}
-    document.getElementById('signup-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+  // Pre-fill email from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const emailFromURL = urlParams.get('email');
+  if (emailFromURL) {
+    document.getElementById('email').value = emailFromURL;
+  }
+
+  // Format currency inputs with commas
+  function formatCurrency(input) {
+    let value = input.value.replace(/,/g, ''); // Remove existing commas
+    if (value && !isNaN(value)) {
+      input.value = parseInt(value).toLocaleString('en-GB');
+    }
+  }
+
+  // Add formatting to currency fields
+  ['turnover', 'publicLiability'].forEach(id => {
+    const input = document.getElementById(id);
+    input.addEventListener('blur', () => formatCurrency(input));
+    input.addEventListener('input', (e) => {
+      // Allow only numbers and commas
+      e.target.value = e.target.value.replace(/[^\d,]/g, '');
+    });
+  });
+
+  document.getElementById('signup-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving...';
+    
+    // Collect form data (remove commas from numbers)
+    const profile = {
+      turnover: parseInt(document.getElementById('turnover').value.replace(/,/g, '')),
+      employees: parseInt(document.getElementById('employees').value),
+      publicLiability: parseInt(document.getElementById('publicLiability').value.replace(/,/g, '')),
+      hasCHAS: document.getElementById('hasCHAS').checked,
+      hasSMAS: document.getElementById('hasSMAS').checked,
+      hasConstructionline: document.getElementById('hasConstructionline').checked,
+      hasSafeContractor: document.getElementById('hasSafeContractor').checked,
+      yearsAdaptations: parseInt(document.getElementById('yearsAdaptations').value),
+      hasSafeguarding: document.getElementById('hasSafeguarding').checked,
+      hasDBSChecks: document.getElementById('hasDBSChecks').checked,
+      hasHealthSafety: document.getElementById('hasHealthSafety').checked,
+      location: document.getElementById('location').value
+    };
+    
+    const email = document.getElementById('email').value;
+    
+    try {
+      // Save to database
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, profile })
+      });
       
-      const submitBtn = document.getElementById('submit-btn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Saving...';
-      
-      // Collect form data
-      const profile = {
-        turnover: parseInt(document.getElementById('turnover').value),
-        employees: parseInt(document.getElementById('employees').value),
-        publicLiability: parseInt(document.getElementById('publicLiability').value),
-        hasCHAS: document.getElementById('hasCHAS').checked,
-        hasSMAS: document.getElementById('hasSMAS').checked,
-        hasConstructionline: document.getElementById('hasConstructionline').checked,
-        hasSafeContractor: document.getElementById('hasSafeContractor').checked,
-        yearsAdaptations: parseInt(document.getElementById('yearsAdaptations').value),
-        hasSafeguarding: document.getElementById('hasSafeguarding').checked,
-        hasDBSChecks: document.getElementById('hasDBSChecks').checked,
-        hasHealthSafety: document.getElementById('hasHealthSafety').checked,
-        location: document.getElementById('location').value
-      };
-      
-      const email = document.getElementById('email').value;
-      
-      try {
-        // Save to database
-        const response = await fetch('/api/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, profile })
-        });
-        
-        if (response.ok) {
-          // Show success message
-          document.getElementById('signup-form').classList.add('hidden');
-          document.getElementById('success-message').classList.remove('hidden');
-        } else {
-          alert('Error signing up. Please try again.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Start Free Trial - £29/month after';
-        }
-      } catch (error) {
+      if (response.ok) {
+        const data = await response.json();
+        // Redirect to results page with profile
+        window.location.href = `/results.html?email=${encodeURIComponent(email)}`;
+      } else {
         alert('Error signing up. Please try again.');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Start Free Trial - £29/month after';
       }
-    });
-  </script>
+    } catch (error) {
+      alert('Error signing up. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Start Free Trial - £29/month after';
+    }
+  });
+</script>
 </body>
 </html>
