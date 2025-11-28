@@ -42,10 +42,10 @@ export default async function handler(req, res) {
     // Sort by score
     qualifications.sort((a, b) => b.score - a.score);
     
-    // Return green and amber matches
-    const matches = qualifications.filter(q => 
-      q.status === 'green' || q.status === 'amber'
-    );
+    // Return top 5 matches regardless of status (green, amber, OR red)
+const topMatches = qualifications.slice(0, 5);
+
+res.status(200).json({ matches: topMatches });
     
     res.status(200).json({ matches });
     
