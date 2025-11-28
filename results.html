@@ -88,17 +88,24 @@
 
   <script>
     async function fetchAndShowTenders() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const email = urlParams.get('email');
-      
-      if (!email) {
-        window.location.href = '/';
-        return;
-      }
+  // Get profile from sessionStorage
+  const profileStr = sessionStorage.getItem('userProfile');
+  const email = sessionStorage.getItem('userEmail');
+  
+  if (!profileStr || !email) {
+    window.location.href = '/';
+    return;
+  }
 
-      try {
-        // Fetch tender matches for this user
-        const response = await fetch(`/api/check-tenders?email=${encodeURIComponent(email)}`);
+  try {
+    const profile = JSON.parse(profileStr);
+    
+    // Fetch tender matches with profile data
+    const response = await fetch('/api/check-tenders-direct', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile })
+    });
         const data = await response.json();
         
         document.getElementById('loading').classList.add('hidden');
