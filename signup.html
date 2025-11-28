@@ -230,10 +230,11 @@ function formatCurrency(input) {
       });
       
       if (response.ok) {
-        const data = await response.json();
-        // Redirect to results page with profile
-        window.location.href = `/results.html?email=${encodeURIComponent(email)}`;
-      } else {
+  // Store profile in sessionStorage and redirect
+  sessionStorage.setItem('userProfile', JSON.stringify(profile));
+  sessionStorage.setItem('userEmail', email);
+  window.location.href = `/results.html`;
+} else {
         const errorData = await response.json();
         alert(errorData.error || 'Error signing up. Please try again.');
         submitBtn.disabled = false;
