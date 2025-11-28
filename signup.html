@@ -1,251 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sign Up - Tendrly</title>
+  <title>Tendrly - Tender Matches for West Midlands Builders</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-  <div class="max-w-3xl mx-auto p-8 pt-12">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Check Your Tender Matches</h1>
-<p class="text-lg text-gray-600">Enter your business details to see which tenders you qualify for</p>
+  <div class="max-w-2xl mx-auto p-8 pt-20">
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">
+        Find Tenders You Actually Qualify For
+      </h1>
+      <p class="text-xl text-gray-600">
+        Instant qualification checking for West Midlands disability adaptation tenders
+      </p>
     </div>
-
-    <!-- Form -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
-      <form id="signup-form" class="space-y-6">
-        
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-900 mb-2">Email Address</label>
-          <input type="email" id="email" required readonly
-       placeholder="your@email.com"
-       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-        </div>
-
-        <!-- Financial Details -->
-        <div class="border-t pt-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Financial Information</h3>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Annual Turnover (£)</label>
-              <input type="text" id="turnover" required 
-       placeholder="2,000,000"
-       class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Number of Employees</label>
-              <input type="number" id="employees" required 
-                     placeholder="8"
-                     class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-            </div>
-          </div>
-        </div>
-
-        <!-- Insurance -->
-        <div class="border-t pt-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Insurance</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Public Liability (£)</label>
-             <input type="text" id="publicLiability" required 
-       placeholder="5,000,000"
-       class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-              <p class="text-xs text-gray-500 mt-1">Most councils require £5M minimum</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Experience -->
-        <div class="border-t pt-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Experience</h3>
+    
+    <div class="bg-white p-8 rounded-xl shadow-lg mb-8">
+      <h2 class="text-2xl font-bold mb-4">How It Works</h2>
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl">📝</span>
           <div>
-            <label class="block text-sm font-semibold text-gray-900 mb-2">Years in Adaptations Work</label>
-            <input type="number" id="yearsAdaptations" required 
-                   placeholder="5"
-                   class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-            <p class="text-xs text-gray-500 mt-1">Wet rooms, level access, DFG work, etc.</p>
+            <h3 class="font-bold">Enter Your Business Details</h3>
+            <p class="text-gray-600 text-sm">Turnover, insurance, accreditations - takes 2 minutes</p>
           </div>
         </div>
-
-        <!-- Accreditations -->
-        <div class="border-t pt-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">SSIP Accreditations</h3>
-          <p class="text-sm text-gray-600 mb-3">Check all that apply</p>
-          <div class="grid grid-cols-2 gap-3">
-            <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasCHAS" class="w-4 h-4 text-blue-600 rounded">
-              <span class="text-sm font-medium">CHAS</span>
-            </label>
-            <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasSMAS" class="w-4 h-4 text-blue-600 rounded">
-              <span class="text-sm font-medium">SMAS</span>
-            </label>
-            <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasConstructionline" class="w-4 h-4 text-blue-600 rounded">
-              <span class="text-sm font-medium">Constructionline</span>
-            </label>
-            <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasSafeContractor" class="w-4 h-4 text-blue-600 rounded">
-              <span class="text-sm font-medium">SafeContractor</span>
-            </label>
+        <div class="flex items-start gap-3">
+          <span class="text-2xl">🔍</span>
+          <div>
+            <h3 class="font-bold">We Check Current Tenders</h3>
+            <p class="text-gray-600 text-sm">Live tenders from Contracts Finder for West Midlands adaptations</p>
           </div>
         </div>
-
-        <!-- Policies -->
-        <div class="border-t pt-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Essential Policies</h3>
-          <div class="space-y-3">
-            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasSafeguarding" class="w-4 h-4 text-blue-600 rounded mt-0.5">
-              <div>
-                <span class="text-sm font-medium">Safeguarding Policy</span>
-                <p class="text-xs text-gray-500">Required for vulnerable tenants</p>
-              </div>
-            </label>
-            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasDBSChecks" class="w-4 h-4 text-blue-600 rounded mt-0.5">
-              <div>
-                <span class="text-sm font-medium">DBS Checks for Staff</span>
-                <p class="text-xs text-gray-500">Enhanced DBS for housing work</p>
-              </div>
-            </label>
-            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-              <input type="checkbox" id="hasHealthSafety" class="w-4 h-4 text-blue-600 rounded mt-0.5">
-              <div>
-                <span class="text-sm font-medium">Health & Safety Policy</span>
-                <p class="text-xs text-gray-500">CDM 2015 compliant</p>
-              </div>
-            </label>
+        <div class="flex items-start gap-3">
+          <span class="text-2xl">✅</span>
+          <div>
+            <h3 class="font-bold">See Your Matches Instantly</h3>
+            <p class="text-gray-600 text-sm">Green (apply), Amber (maybe), Red (don't waste time)</p>
           </div>
         </div>
-
-        <!-- Location -->
-        <div class="border-t pt-6">
-          <label class="block text-sm font-semibold text-gray-900 mb-2">Your Location</label>
-          <input type="text" id="location" required 
-                 placeholder="Birmingham"
-                 class="w-full px-4 py-3 border border-gray-300 rounded-lg">
-        </div>
-
-        <!-- Submit -->
-        <div class="border-t pt-6">
-         <button type="submit" id="submit-btn"
-        class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors">
-  Check My Matches
-</button>
-        </div>
-
-      </form>
-
-      <!-- Success Message (hidden initially) -->
-      <div id="success-message" class="hidden text-center py-8">
-        <div class="text-6xl mb-4">✅</div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">You're all set!</h2>
-        <p class="text-gray-600 mb-4">We'll start monitoring tenders for you from tomorrow at 9am.</p>
-        <p class="text-sm text-gray-500">Check your email for confirmation.</p>
       </div>
     </div>
-  </div>
 
-  <script>
-  // Pre-fill email from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const emailFromURL = urlParams.get('email');
-  if (emailFromURL) {
-    document.getElementById('email').value = emailFromURL;
-  }
-
-  // Format currency inputs with commas as user types
-function formatCurrency(input) {
-  // Get cursor position
-  let cursorPosition = input.selectionStart;
-  let oldLength = input.value.length;
-  
-  // Remove all non-digits
-  let value = input.value.replace(/\D/g, '');
-  
-  // Add commas
-  if (value) {
-    value = parseInt(value).toLocaleString('en-GB');
-  }
-  
-  // Update input
-  input.value = value;
-  
-  // Restore cursor position (accounting for added commas)
-  let newLength = value.length;
-  cursorPosition += (newLength - oldLength);
-  input.setSelectionRange(cursorPosition, cursorPosition);
-}
-
-// Add formatting to currency fields
-['turnover', 'publicLiability'].forEach(id => {
-  const input = document.getElementById(id);
-  
-  // Format on every keystroke
-  input.addEventListener('input', () => formatCurrency(input));
-  
-  // Also format on blur (when leaving field)
-  input.addEventListener('blur', () => {
-    let value = input.value.replace(/\D/g, '');
-    if (value) {
-      input.value = parseInt(value).toLocaleString('en-GB');
-    }
-  });
-});
-
-  document.getElementById('signup-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving...';
-    
-    // Collect form data (remove commas from numbers)
-    const profile = {
-      turnover: parseInt(document.getElementById('turnover').value.replace(/,/g, '')),
-      employees: parseInt(document.getElementById('employees').value),
-      publicLiability: parseInt(document.getElementById('publicLiability').value.replace(/,/g, '')),
-      hasCHAS: document.getElementById('hasCHAS').checked,
-      hasSMAS: document.getElementById('hasSMAS').checked,
-      hasConstructionline: document.getElementById('hasConstructionline').checked,
-      hasSafeContractor: document.getElementById('hasSafeContractor').checked,
-      yearsAdaptations: parseInt(document.getElementById('yearsAdaptations').value),
-      hasSafeguarding: document.getElementById('hasSafeguarding').checked,
-      hasDBSChecks: document.getElementById('hasDBSChecks').checked,
-      hasHealthSafety: document.getElementById('hasHealthSafety').checked,
-      location: document.getElementById('location').value
-    };
-    
-    const email = document.getElementById('email').value;
-    
-    try {
-      // Save to database
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, profile })
-      });
+    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+      <h2 class="text-2xl font-bold mb-4">Check Your Tender Matches</h2>
+      <p class="text-gray-600 mb-6">Enter your business details to see which West Midlands tenders you qualify for</p>
       
-      if (response.ok) {
-  // Store profile in sessionStorage and redirect
-  sessionStorage.setItem('userProfile', JSON.stringify(profile));
-  sessionStorage.setItem('userEmail', email);
-  window.location.href = `/results.html`;
-} else {
-        const errorData = await response.json();
-        alert(errorData.error || 'Error signing up. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Start Free Trial - £29/month after';
-      }
-    } catch (error) {
-      alert('Error signing up. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Start Free Trial - £29/month after';
-    }
-  });
-</script>
+      <a href="signup.html" class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors">
+        Check Tender Matches Now
+      </a>
+      
+      <p class="text-sm text-gray-500 mt-4">Free to use • No signup required</p>
+    </div>
+
+    <div class="text-center mt-8 text-gray-600">
+      <p class="text-sm">Built for adaptation builders in Birmingham & West Midlands</p>
+    </div>
+  </div>
 </body>
 </html>
