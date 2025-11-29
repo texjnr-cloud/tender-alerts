@@ -168,23 +168,7 @@
 
     async function showTenders() {
       try {
-        // Check if we have cached matches from signup.html
-        const cachedMatches = sessionStorage.getItem('tenderMatches');
-        
-        if (cachedMatches) {
-          console.log('Using cached matches from signup');
-          const matches = JSON.parse(cachedMatches);
-          document.getElementById('loading').classList.add('hidden');
-          
-          if (matches && matches.length > 0) {
-            displayTenderMatches(matches);
-          } else {
-            document.getElementById('no-matches').classList.remove('hidden');
-          }
-          return;
-        }
-        
-        // If no cached matches, fetch using stored profile
+        // Always fetch fresh data from API, don't use cache
         const profileStr = sessionStorage.getItem('userProfile');
         
         if (!profileStr) {
