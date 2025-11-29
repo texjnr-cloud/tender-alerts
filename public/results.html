@@ -29,7 +29,7 @@
       <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
         <h3 class="font-bold text-blue-900 mb-2">📋 How to Apply for These Tenders</h3>
         <ol class="text-sm text-blue-800 space-y-2 list-decimal list-inside">
-          <li><strong>Click "View Tender"</strong> - Read full details on Contracts Finder (free, no login needed)</li>
+          <li><strong>Click "Apply Now"</strong> - Go to Contracts Finder to submit your bid</li>
           <li><strong>Download tender pack</strong> - Get all documents and requirements</li>
           <li><strong>Register on buyer's portal</strong> - Each council uses their own portal (ProContract, etc.)</li>
           <li><strong>Submit your bid</strong> - Upload documents before deadline</li>
@@ -39,9 +39,9 @@
 
       <!-- Understanding Scores -->
       <div class="bg-white rounded-xl shadow-lg p-8 text-center">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Understanding Your Scores</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Understanding Your Match Status</h2>
         <p class="text-gray-600 mb-6">
-          The match score shows how well you qualify for each tender based on your business profile.
+          Your status shows how well you qualify for each tender based on your business profile.
         </p>
         <div class="grid md:grid-cols-3 gap-4 text-left">
           <div class="p-4 bg-green-50 rounded-lg">
@@ -133,10 +133,6 @@
                 <span class="px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text} block mb-2">
                   ${config.label}
                 </span>
-                <div class="text-2xl font-bold ${match.score >= 0 ? 'text-green-600' : 'text-red-600'}">
-                  ${match.score >= 0 ? '+' : ''}${match.score}
-                </div>
-                <p class="text-xs text-gray-500">Match Score</p>
               </div>
             </div>
             
@@ -160,7 +156,7 @@
             
             <a href="${match.tender.url}" target="_blank" 
                class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm">
-              View Tender Details →
+              Apply Now →
             </a>
           </div>
         `;
