@@ -2,6 +2,5 @@
   "crons": [{
     "path": "/api/cron/daily-tender-check",
     "schedule": "0 9 * * *"
-  }],
-  "public": "public"
+  }]
 }
