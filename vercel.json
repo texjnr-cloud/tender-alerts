@@ -3,7 +3,5 @@
     "path": "/api/cron/daily-tender-check",
     "schedule": "0 9 * * *"
   }],
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "buildCommand": "echo 'Static site - no build needed'"
+  "public": "public"
 }
