@@ -160,48 +160,66 @@
       });
     });
 
- // Form submission
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const submitBtn = document.getElementById('submit-btn');
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Checking matches...';
-  
-  try {
-    // Collect form data
-    const profile = {
-      turnover: parseInt(document.getElementById('turnover').value.replace(/,/g, '')),
-      employees: parseInt(document.getElementById('employees').value),
-      publicLiability: parseInt(document.getElementById('publicLiability').value.replace(/,/g, '')),
-      hasCHAS: document.getElementById('hasCHAS').checked,
-      hasSMAS: document.getElementById('hasSMAS').checked,
-      hasConstructionline: document.getElementById('hasConstructionline').checked,
-      hasSafeContractor: document.getElementById('hasSafeContractor').checked,
-      yearsAdaptations: parseInt(document.getElementById('yearsAdaptations').value),
-      hasSafeguarding: document.getElementById('hasSafeguarding').checked,
-      hasDBSChecks: document.getElementById('hasDBSChecks').checked,
-      hasHealthSafety: document.getElementById('hasHealthSafety').checked,
-      location: document.getElementById('location').value
-    };
-    
-    console.log('Profile collected:', profile);
-    
-    // Store in sessionStorage
-    sessionStorage.setItem('userProfile', JSON.stringify(profile));
-    console.log('Stored in sessionStorage');
-    
-    // Redirect to results
-    console.log('Redirecting to results.html');
- window.location.href = 'https://tendrly.co.uk/results.html';
-    
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Error processing form. Please try again.');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Check My Matches';
-  }
-});
+    // Form submission
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Checking matches...';
+      
+      try {
+        // Collect form data
+        const profile = {
+          turnover: parseInt(document.getElementById('turnover').value.replace(/,/g, '')),
+          employees: parseInt(document.getElementById('employees').value),
+          publicLiability: parseInt(document.getElementById('publicLiability').value.replace(/,/g, '')),
+          hasCHAS: document.getElementById('hasCHAS').checked,
+          hasSMAS: document.getElementById('hasSMAS').checked,
+          hasConstructionline: document.getElementById('hasConstructionline').checked,
+          hasSafeContractor: document.getElementById('hasSafeContractor').checked,
+          yearsAdaptations: parseInt(document.getElementById('yearsAdaptations').value),
+          hasSafeguarding: document.getElementById('hasSafeguarding').checked,
+          hasDBSChecks: document.getElementById('hasDBSChecks').checked,
+          hasHealthSafety: document.getElementById('hasHealthSafety').checked,
+          location: document.getElementById('location').value
+        };
+        
+        console.log('Profile collected:', profile);
+        
+        // Call the backend API
+        console.log('Calling /api/check-tenders-direct...');
+        const response = await fetch('/api/check-tenders-direct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ profile })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`API error: ${errorData.error || response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('Matches received:', result);
+        
+        // Store both profile and matches in sessionStorage
+        sessionStorage.setItem('userProfile', JSON.stringify(profile));
+        sessionStorage.setItem('tenderMatches', JSON.stringify(result.matches));
+        console.log('Data stored in sessionStorage, redirecting to results.html');
+        
+        // Redirect to results
+        window.location.href = '/results.html';
+        
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error processing form: ' + error.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Check My Matches';
+      }
+    });
   </script>
 </body>
 </html>
