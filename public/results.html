@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Tender Matches - Tendrly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+  <div class="max-w-4xl mx-auto p-8 pt-12">
+    
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-xl text-gray-600">Finding your tender matches...</p>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Here Are Your Top Matches</h1>
+        <p class="text-lg text-gray-600">Based on your business profile, we found these tenders for you</p>
+      </div>
+
+      <!-- Tender Cards -->
+      <div id="tender-cards" class="space-y-6 mb-8">
+        <!-- Cards will be inserted here -->
+      </div>
+
+      <!-- How to Apply Box -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+        <h3 class="font-bold text-blue-900 mb-2">📋 How to Apply for These Tenders</h3>
+        <ol class="text-sm text-blue-800 space-y-2 list-decimal list-inside">
+          <li><strong>Click "View Tender"</strong> - Read full details on Contracts Finder (free, no login needed)</li>
+          <li><strong>Download tender pack</strong> - Get all documents and requirements</li>
+          <li><strong>Register on buyer's portal</strong> - Each council uses their own portal (ProContract, etc.)</li>
+          <li><strong>Submit your bid</strong> - Upload documents before deadline</li>
+        </ol>
+        <p class="text-xs text-blue-700 mt-3">💡 Tip: ProContract is used by most West Midlands councils. Register once, apply to multiple tenders.</p>
+      </div>
+
+      <!-- Understanding Scores -->
+      <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Understanding Your Scores</h2>
+        <p class="text-gray-600 mb-6">
+          The match score shows how well you qualify for each tender based on your business profile.
+        </p>
+        <div class="grid md:grid-cols-3 gap-4 text-left">
+          <div class="p-4 bg-green-50 rounded-lg">
+            <div class="text-3xl mb-2">✅</div>
+            <h3 class="font-bold text-green-900 mb-1">Strong Match</h3>
+            <p class="text-sm text-green-800">You meet all mandatory requirements. Worth applying.</p>
+          </div>
+          <div class="p-4 bg-yellow-50 rounded-lg">
+            <div class="text-3xl mb-2">⚠️</div>
+            <h3 class="font-bold text-yellow-900 mb-1">Possible Match</h3>
+            <p class="text-sm text-yellow-800">You meet most requirements but have some gaps.</p>
+          </div>
+          <div class="p-4 bg-red-50 rounded-lg">
+            <div class="text-3xl mb-2">❌</div>
+            <h3 class="font-bold text-red-900 mb-1">Don't Bid</h3>
+            <p class="text-sm text-red-800">You're missing critical requirements. Don't waste time.</p>
+          </div>
+        </div>
+        <a href="/" class="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+          Check Another Profile
+        </a>
+      </div>
+    </div>
+
+    <!-- No Matches State -->
+    <div id="no-matches" class="hidden text-center py-20">
+      <div class="text-6xl mb-4">🔍</div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">No Current Matches</h2>
+      <p class="text-gray-600 mb-6">
+        We didn't find any tenders matching your profile right now.
+      </p>
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">What to do next</h3>
+        <p class="text-gray-600 mb-4">
+          Try adjusting your search criteria or check back later for new opportunities.
+        </p>
+        <a href="/" class="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+          Try Different Criteria
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    async function fetchAndShowTenders() {
+  // Get profile from sessionStorage
+  const profileStr = sessionStorage.getItem('userProfile');
+  const email = sessionStorage.getItem('userEmail');
+  
+  if (!profileStr || !email) {
+    window.location.href = '/';
+    return;
+  }
+
+  try {
+    const profile = JSON.parse(profileStr);
+    
+    // Fetch tender matches with profile data
+    const response = await fetch('/api/check-tenders-direct', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ profile })
+    });
+        const data = await response.json();
+        
+        document.getElementById('loading').classList.add('hidden');
+        
+        if (data.matches && data.matches.length > 0) {
+          const statusConfig = {
+            green: { 
+              bg: 'bg-green-100', 
+              text: 'text-green-800', 
+              border: 'border-green-500',
+              label: 'STRONG MATCH',
+              emoji: '✅'
+            },
+            amber: { 
+              bg: 'bg-yellow-100', 
+              text: 'text-yellow-800',
+              border: 'border-yellow-500',
+              label: 'POSSIBLE MATCH',
+              emoji: '⚠️'
+            },
+            red: { 
+              bg: 'bg-red-100', 
+              text: 'text-red-800',
+              border: 'border-red-500',
+              label: 'DON\'T BID',
+              emoji: '❌'
+            }
+          };
+          
+          const cardsHTML = data.matches.map(match => {
+            const config = statusConfig[match.status] || statusConfig.amber;
+            
+            return `
+              <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 ${config.border}">
+                <div class="flex items-start justify-between mb-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="text-2xl">${config.emoji}</span>
+                      <h3 class="text-xl font-bold text-gray-900">${match.tender.title}</h3>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                      ${match.tender.buyer} • 
+                      ${match.tender.value ? '£' + match.tender.value.toLocaleString() : 'Value TBC'}
+                      ${match.tender.deadline ? ' • Deadline: ' + new Date(match.tender.deadline).toLocaleDateString('en-GB') : ''}
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text} block mb-2">
+                      ${config.label}
+                    </span>
+                    <div class="text-2xl font-bold ${match.score >= 0 ? 'text-green-600' : 'text-red-600'}">
+                      ${match.score >= 0 ? '+' : ''}${match.score}
+                    </div>
+                    <p class="text-xs text-gray-500">Match Score</p>
+                  </div>
+                </div>
+                
+                ${match.passes && match.passes.length > 0 ? `
+                  <div class="mb-4 bg-green-50 p-3 rounded-lg">
+                    <p class="text-sm font-semibold text-green-700 mb-2">✓ Why you match:</p>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                      ${match.passes.map(p => `<li class="flex items-start gap-2"><span class="text-green-600">•</span><span>${p}</span></li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                ${match.issues && match.issues.length > 0 ? `
+                  <div class="mb-4 bg-red-50 p-3 rounded-lg">
+                    <p class="text-sm font-semibold text-red-700 mb-2">${match.status === 'red' ? '❌ Why you shouldn\'t bid:' : '⚠️ Potential issues:'}</p>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                      ${match.issues.map(i => `<li class="flex items-start gap-2"><span class="text-red-600">•</span><span>${i}</span></li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                <a href="${match.tender.url}" target="_blank" 
+                   class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 text-sm">
+                  View Tender Details →
+                </a>
+              </div>
+            `;
+          }).join('');
+          
+          document.getElementById('tender-cards').innerHTML = cardsHTML;
+          document.getElementById('results').classList.remove('hidden');
+        } else {
+          // No matches found
+          document.getElementById('no-matches').classList.remove('hidden');
+        }
+        
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('no-matches').classList.remove('hidden');
+      }
+    }
+
+    // Run on page load
+    fetchAndShowTenders();
+  </script>
+</body>
+</html>
