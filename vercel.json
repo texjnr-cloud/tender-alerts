@@ -2,5 +2,19 @@
   "crons": [{
     "path": "/api/cron/daily-tender-check",
     "schedule": "0 9 * * *"
-  }]
+  }],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/signup.html",
+      "destination": "/signup.html"
+    },
+    {
+      "source": "/results.html",
+      "destination": "/results.html"
+    }
+  ]
 }
